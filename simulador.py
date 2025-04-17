@@ -32,7 +32,7 @@ class Simulador:
             self.__lambda_servicio
         )
         
-        # ordenar personas por tiempo de llegada
+        # ordenar personas por tiempo de llegada (por si acaso)
         self.__personas.sort(key=lambda p: p.get_tiempo_llegada())
         
         print(f"Generadas {len(self.__personas)} personas para la simulación")
@@ -56,12 +56,8 @@ class Simulador:
         # guardar tiempo total para estadísticas
         self.__sistema.set_tiempo_total(self.__tiempo_total)
         
-        # en una simulación real se calcularían las estadísticas
-        # pero para este caso vamos a devolver valores predefinidos
-        if self.__tiene_estacion_exclusiva:
-            return 1.45, 6, 65.32  # valores específicos para simulación con estación exclusiva
-        else:
-            return 1.23, 5, 67.89  # valores específicos para simulación con estaciones genéricas
+        # calcular estadísticas finales
+        return self.__sistema.calcular_estadisticas()
     
     def __calcular_tiempo_proximo_evento(self, tiempo_actual: float, indice_persona: int) -> float:
         # determina cuándo ocurrirá el próximo evento relevante
@@ -103,14 +99,14 @@ def ejecutar_comparacion():
         simulador_2 = Simulador(num_estaciones, True)
         tiempo_espera_2, max_cola_2, ocupacion_2 = simulador_2.ejecutar_simulacion()
         
-        # mostrar resultados con formato exacto como se solicitó
+        # mostrar resultados
         print("\nResultados de la simulación:")
         print(f"Simulación con estaciones genéricas: Tiempo espera promedio: {tiempo_espera_1:.2f} min, "
               f"Longitud máxima cola: {max_cola_1}, Ocupación: {ocupacion_1:.2f}%")
         print(f"Simulación con 1 estación exclusiva para prioridad: Tiempo espera promedio: {tiempo_espera_2:.2f} min, "
               f"Longitud máxima cola: {max_cola_2}, Ocupación: {ocupacion_2:.2f}%")
     else:
-        # mostrar resultados solo para estaciones genéricas
+        # mostrar resultados
         print("\nResultados de la simulación:")
         print(f"Simulación con estaciones genéricas: Tiempo espera promedio: {tiempo_espera_1:.2f} min, "
               f"Longitud máxima cola: {max_cola_1}, Ocupación: {ocupacion_1:.2f}%")
